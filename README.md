@@ -1,0 +1,5 @@
+Schizophrenia
+=============
+
+Kaggle - Schizophrenia 
+
