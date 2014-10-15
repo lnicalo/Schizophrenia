@@ -30,5 +30,5 @@ Just run the file
 
 Licence
 --
-`LICENCE.txt`
+`LICENSE.txt`
 
