@@ -25,14 +25,4 @@ All files are written in Python.
 
 
 How to generate the solution
---
-
-
-License
---
-
-This software is distributed under the GNU General Public License (version 3 or later); please refer to the file `LICENSE.txt`, included with the software, for details. Schizophrenia
-=============
-
-Kaggle - Schizophrenia 
 
