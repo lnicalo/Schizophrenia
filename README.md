@@ -25,4 +25,10 @@ All files are written in Python.
 
 
 How to generate the solution
+--
+Just run the file
+
+Licence
+--
+`LICENCE.txt`
 
