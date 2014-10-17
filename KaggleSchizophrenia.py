@@ -3,26 +3,34 @@ import pandas as pd
 from scipy import linalg
 from sklearn.lda import LDA
 
+# Configuration
+# Output file name
 outputFile = 'schizoSolution.csv';
+# fMRI FNC mapping file
 spatialPosFile = 'AdditionalInformation/rs_fMRI_FNC_mapping.csv'
+# Training features file
 trainFile = 'train_FNC.csv'
+# Test features file
 testFile = 'test_FNC.csv'
-m = 3 # Number of spatial filters
-a = 0 # Regularization
+# Number of spatial filters
+m = 3
+# Regularization
+a = 0
 
 # Load spatial position file
 spatialLocation = pd.read_csv(spatialPosFile, delimiter=",").values
 # Remove IDs
 spatialLocation = np.delete(spatialLocation, 0, axis=1)
 
-print 'Loading train data ...'
+
 # Load train data
+print 'Loading train data ...'
 trainData = pd.read_csv(trainFile, delimiter=",").values
 # Remove IDs
 trainData = np.delete(trainData, 0, axis=1)
 
-print 'Loading test data ...'
 # Load test data
+print 'Loading test data ...'
 testData = pd.read_csv(testFile, delimiter=",").values
 # Save IDs
 testIDs = testData[:,0].astype(np.int)
@@ -32,13 +40,15 @@ testData = np.delete(testData, 0, axis=1)
 # Channel positions
 positions = np.unique(spatialLocation)
 
-print 'Building spatial covariances ...'
-print 'Train spatial covariaces ...'
 # Build spatial covariances
+print 'Building spatial covariances ...'
+
 Nfeatures = trainData.shape[1]
 Nsubjects = trainData.shape[0]
 Nchannels = positions.shape[0]
 
+# Building training covariances
+print 'Train spatial covariaces ...'
 K = np.zeros((Nsubjects, Nchannels, Nchannels))
 for i in range(trainData.shape[1]):
     f = trainData[:, i] 
@@ -50,8 +60,8 @@ for i in range(trainData.shape[1]):
 for i in range(Nchannels):
     K[:, i, i] = 1
     
+# Building training covariances
 print 'Test spatial covariaces ...'
-# Build spatial covariances
 NtestSubjects = testData.shape[0]
 Nchannels = positions.shape[0]
 
@@ -66,8 +76,9 @@ for i in range(testData.shape[1]):
 for i in range(Nchannels):
     Ktest[:, i, i] = 1
 
-print 'Training CSP'
+
 # Load labels
+print 'Training CSP. Computing spatial filters ...'
 labels = np.genfromtxt('train_labels.csv', delimiter = ',')
 # Remove fields
 labels = np.delete(labels, 0, axis=0)
@@ -88,8 +99,9 @@ sel = np.hstack( (np.arange(0, m), np.arange(W.shape[0] - m, W.shape[0])) )
 W = W[:, ind[sel]]
 
 print 'Spatial filtering ...'
-print 'Filtering train data ...'
+
 # Spatial filtering train
+print 'Filtering train data ...'
 trainFeats = np.empty([K.shape[0], m*2])
 for i in range(0,K.shape[0]):
     aux = np.dot( np.dot(W.T, K[i,:,:]), W )
@@ -102,8 +114,9 @@ for i in range(0,Ktest.shape[0]):
     aux = np.dot( np.dot(W.T, Ktest[i,:,:]), W )
     testFeats[i,:] = ( np.diag(aux) ) / np.trace(aux)
 
-print 'Classification ...'
+
 # Classification
+print 'Classification ...'
 clf = LDA()
 clf.fit(trainFeats, labels)
 predictedProb = clf.predict_proba(testFeats)
