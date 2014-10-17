@@ -14,10 +14,6 @@ Common Spatial Pattern (CSP) filtering was originally devised as a spatial filte
 
 Functional Network Connectivity (FNC) are correlation values that summarize the overall connection between independent brain maps over time. In short, FNC features quantify the subject's overall level of 'synchronicity' between brain areas using correlation values. Therefore, spatial covariances can be build from these features.
 
-The code firstly builds these spatial covariance matrices on the basis of FNC features. After, it solves a generalized eigenvalue problem to compute spatial filters. All spatial filters are not equally relevant. The revelevance depends on the corresponding eigenvalue. So, they are sorted by eigenvalue. The spatial filters with higher and lower eigenvalue are selected. The number of spatial filters can be configured modifying the variable `m`. 
-
-After spatial filtering, a linear model is used to classify the CSP features. Classification output is provided in a probabilistic way. This is becuase evaluation is performed computing AUC.
-
 Dependencies
 --
 To succesfully run the code the following Python libraries are required: 
@@ -30,10 +26,13 @@ Code description
 --
 All files are written in Python.
 
+The code firstly builds these spatial covariance matrices on the basis of FNC features. After, it solves a generalized eigenvalue problem to compute spatial filters. All spatial filters are not equally relevant. The revelevance depends on the corresponding eigenvalue. So, they are sorted by eigenvalue. The spatial filters with higher and lower eigenvalue are selected. The number of spatial filters can be configured modifying the variable `m`. 
+
+After spatial filtering, a linear model is used to classify the CSP features. Classification output is provided in a probabilistic way. This is because classification performance is measured using the area under the ROC curve (AUC).
 
 How to generate the solution
 --
-Just run the file. The output file is 
+Just run the file.
 
 Licence
 --
